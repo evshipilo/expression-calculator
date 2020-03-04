@@ -1,7 +1,7 @@
 function eval(str) {
     // находим * или / в строке  вычисляем выражение и подставляем обратно в
     // строку str.replace()
-    // снова ищем и подставляем
+    // снова ищем и подставляем потом так же с + и -
     while (true) {
         if (str.search(/(\-*\d+\.*\d*\s*\/\s*\-*\d+\.*\d*)|(\-*\d+\.*\d*\s*\*\s*\-*\d+\.*\d*)/) == -1 &&
             str.search(/(\-*\d+\.*\d*\s*\+\s*\-*\d+\.*\d*)|(\-*\d+\.*\d*\s*\-\s*\-*\d+\.*\d*)/) == -1) break;
@@ -12,6 +12,7 @@ function eval(str) {
                 if (match.search(/(\-*\d+\.*\d*\s*\/\s*\-*\d+\.*\d*)/) != -1) {
                     console.log(match+'***');
                     let arr = match.split('/');
+                    if (+arr[1]==0) throw Error('TypeError: Division by zero.');
                     return ((+arr[0]) / (+arr[1]) + '');   //доп скобки для
                     // учета отрицательных
                 } else {
@@ -57,7 +58,6 @@ function expressionCalculator(expr) {
     // ищем выражение в скобках и вызываем eval, подставляем значение вместо
     // скобок
     while (true) {
-        //console.log(expr);
         if (expr.search(/\([^\(\)]*\)/) != -1) {
             expr=expr.replace(/\([^\(\)]*\)/,function (match) {
                 let matchArr=match.split('');
@@ -67,7 +67,6 @@ function expressionCalculator(expr) {
             })
         }
         else {
-            //console.log("**********"+ expr)
             return eval(expr);
         }
     }
