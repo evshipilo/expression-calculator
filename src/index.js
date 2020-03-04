@@ -10,7 +10,7 @@ function eval(str) {
 
             str = str.replace(/(\-*\d+\.*\d*\s*\/\s*\-*\d+\.*\d*)|(\-*\d+\.*\d*\s*\*\s*\-*\d+\.*\d*)/, function (match) {  //выдаст первое совпадение match или с / или с *
                 if (match.search(/(\-*\d+\.*\d*\s*\/\s*\-*\d+\.*\d*)/) != -1) {
-                    console.log(match+'***');
+                    //console.log(match+'***');
                     let arr = match.split('/');
                     if (+arr[1]==0) throw Error('TypeError: Division by zero.');
                     return ((+arr[0]) / (+arr[1]) + '');   //доп скобки для
@@ -32,7 +32,7 @@ function eval(str) {
                     let arr = match.split('+');
                     return ((+arr[0]) + (+arr[1])).toString();
                 } else {
-                    console.log(match+'---');
+                    //console.log(match+'---');
                     //сепаратор '-' не правильно разделяет строку если числа
                     // отрицательные. меняем - на ?
                     let arrG = match.split('');
@@ -58,6 +58,15 @@ function expressionCalculator(expr) {
     // ищем выражение в скобках и вызываем eval, подставляем значение вместо
     // скобок
     while (true) {
+        //ошибка если скобки не парные
+        let countLeft=0;
+        let countRight=0;
+        for (let i=0;i<expr.length;i++){
+            if(expr[i]=="(") countLeft++;
+            if(expr[i]==")") countRight++;
+        }
+        if(countLeft!=countRight) throw Error('ExpressionError: Brackets must be paired');
+
         if (expr.search(/\([^\(\)]*\)/) != -1) {
             expr=expr.replace(/\([^\(\)]*\)/,function (match) {
                 let matchArr=match.split('');
