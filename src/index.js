@@ -13,7 +13,9 @@ function eval(str) {
                     //console.log(match+'***');
                     let arr = match.split('/');
                     if (+arr[1]==0) throw Error('TypeError: Division by zero.');
-                    return ((+arr[0]) / (+arr[1]) + '');   //доп скобки для
+                    return (((+arr[0]) / (+arr[1])).toFixed(14)); //чтоб не
+                    // появлялось -е в степени
+                    // доп скобки для
                     // учета отрицательных
                 } else {
                     let arr = match.split('*');
