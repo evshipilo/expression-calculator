@@ -3,29 +3,29 @@ function eval(str) {
     // строку str.replace()
     // снова ищем и подставляем
     while (true) {
-        if (str.search(/(\-*\d+ \/ \-*\d+)|(\-*\d+ \* \-*\d+)/) == -1 &&
-            str.search(/(\-*\d+ \+ \-*\d+)|(\-*\d+ \- \-*\d+)/) == -1) break;
+        if (str.search(/(\-*\d+\.*\d* \/ \-*\d+\.*\d*)|(\-*\d+\.*\d* \* \-*\d+\.*\d*)/) == -1 &&
+            str.search(/(\-*\d+\.*\d* \+ \-*\d+\.*\d*)|(\-*\d+\.*\d* \- \-*\d+\.*\d*)/) == -1) break;
 
-        if (str.search(/(\-*\d+ \/ \-*\d+)|(\-*\d+ \* \-*\d+)/) != -1) {
+        if (str.search(/(\-*\d+\.*\d* \/ \-*\d+\.*\d*)|(\-*\d+\.*\d* \* \-*\d+\.*\d*)/) != -1) {
 
-            str = str.replace(/(\-*\d+ \/ \-*\d+)|(\-*\d+ \* \-*\d+)/, function (match) {  //выдаст первое совпадение match или с / или с *
-                if (match.search(/(\-*\d+ \/ \-*\d+)/) != -1) {
+            str = str.replace(/(\-*\d+\.*\d* \/ \-*\d+\.*\d*)|(\-*\d+\.*\d* \* \-*\d+\.*\d*)/, function (match) {  //выдаст первое совпадение match или с / или с *
+                if (match.search(/(\-*\d+\.*\d* \/ \-*\d+\.*\d*)/) != -1) {
                     let arr = match.split(' / ');
-                    return ((+arr[0]) / (+arr[1])+'');   //доп скобки для
+                    return ((+arr[0]) / (+arr[1]) + '');   //доп скобки для
                     // учета отрицательных
                 } else {
                     let arr = match.split(' * ');
-                    return ((+arr[0]) * (+arr[1])+'');
+                    return ((+arr[0]) * (+arr[1]) + '');
                 }
             })
         }
 
 
-        if (str.search(/(\-*\d+ \/ \-*\d+)|(\-*\d+ \* \-*\d+)/) == -1 &&
-            str.search(/(\-*\d+ \+ \-*\d+)|(\-*\d+ \- \-*\d+)/) != -1) {
+        if (str.search(/(\-*\d+\.*\d* \/ \-*\d+\.*\d*)|(\-*\d+\.*\d* \* \-*\d+\.*\d*)/) == -1 &&
+            str.search(/(\-*\d+\.*\d* \+ \-*\d+\.*\d*)|(\-*\d+\.*\d* \- \-*\d+\.*\d*)/) != -1) {
 
-            str = str.replace(/(\-*\d+ \+ \-*\d+)|(\-*\d+ \- \-*\d+)/, function (match) {  //выдаст первое совпадение match или с / или с *
-                if (match.search(/(\-*\d+ \+ \-*\d+)/) != -1) {
+            str = str.replace(/(\-*\d+\.*\d* \+ \-*\d+\.*\d*)|(\-*\d+\.*\d* \- \-*\d+\.*\d*)/, function (match) {  //выдаст первое совпадение match или с / или с *
+                if (match.search(/(\-*\d+\.*\d* \+ \-*\d+\.*\d*)/) != -1) {
                     let arr = match.split(' + ');
                     return ((+arr[0]) + (+arr[1])).toString();
                 } else {
@@ -36,17 +36,31 @@ function eval(str) {
         }
 
     }
-    return str
+    return +str;
 }
 
 
 function expressionCalculator(expr) {
-        // ищем выражение в скобках и вызываем eval, подставляем значение вместо
-        // скобок
-    if (str.search(/\([^\(\)]*\)/) != -1)
-
+    // ищем выражение в скобках и вызываем eval, подставляем значение вместо
+    // скобок
+    while (true) {
+        console.log(expr);
+        if (expr.search(/\([^\(\)]*\)/) != -1) {
+            expr=expr.replace(/\([^\(\)]*\)/,function (match) {
+                let matchArr=match.split('');
+                matchArr.splice(0,2);    //delete brackets
+                matchArr.splice(matchArr.length-2,2);
+                return eval(matchArr.join(''))+'';
+            })
+        }
+        else {
+            console.log("**********"+ expr)
+            return eval(expr);
+        }
     }
+}
 
-    module.exports = {
-        expressionCalculator
-    }
+
+module.exports = {
+    expressionCalculator
+}
